@@ -18,6 +18,16 @@ Terraform-practice/
 │   ├── terraform.tfvars.example  # Example values (copy to terraform.tfvars)
 │   ├── local_remote_exec.tf      # Provider, resources, provisioners
 │   └── local_remote_exec.md      # Detailed documentation
+├── 3. Custom and Public Modules Demo/
+│   ├── variables.tf              # Root variable declarations
+│   ├── terraform.tfvars.example  # Example values (copy to terraform.tfvars)
+│   ├── main.tf                   # Provider, custom + public module calls
+│   ├── outputs.tf                # Root outputs from both modules
+│   ├── modules/custom-ec2/       # Custom local module (EC2 + security group)
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   └── custom_public_modules.md  # Detailed documentation
 ├── .gitignore                # Git ignore rules for Terraform files
 └── README.md                 # This file
 ```
@@ -108,10 +118,48 @@ terraform apply
 
 For detailed documentation, see: [`2. Local-exec and Remote-exec Demo/local_remote_exec.md`](2.%20Local-exec%20and%20Remote-exec%20Demo/local_remote_exec.md)
 
+### 3. Custom and Public Modules Demo
+
+This implementation shows how to use a **custom local module** and a **public module** from the Terraform Registry.
+
+**Configuration:** `3. Custom and Public Modules Demo/`
+
+**What it does:**
+- **Custom module** (`./modules/custom-ec2`) – Local module that creates one EC2 instance in the default VPC with a security group (SSH). Has its own `variables.tf`, `main.tf`, and `outputs.tf`.
+- **Public module** – Uses `terraform-aws-modules/s3-bucket/aws` from the Registry (version `~> 4.0`) to create an S3 bucket.
+
+**Architecture (same as folder 2):**
+- **variables.tf** – Root variable declarations.
+- **terraform.tfvars.example** – Example values; copy to `terraform.tfvars` and set credentials and a unique S3 bucket prefix.
+- **main.tf** – Provider, `module "custom_ec2"` (source `./modules/custom-ec2`), and `module "s3_bucket"` (source from Registry).
+- **outputs.tf** – Root outputs from both modules.
+- **modules/custom-ec2/** – Custom module (EC2 + SG).
+
+**Usage:**
+
+```bash
+cd "3. Custom and Public Modules Demo"
+
+cp terraform.tfvars.example terraform.tfvars
+# Edit terraform.tfvars: aws_access_key, aws_secret_key, s3_bucket_name_prefix (globally unique)
+
+terraform init   # Downloads public module
+terraform plan
+terraform apply
+```
+
+**Notes:**
+- S3 bucket names must be globally unique; set `s3_bucket_name_prefix` to something unique in `terraform.tfvars`.
+- Custom module is under `modules/custom-ec2`; public module is pulled from the Registry on `terraform init`.
+
+For detailed documentation, see: [`3. Custom and Public Modules Demo/custom_public_modules.md`](3.%20Custom%20and%20Public%20Modules%20Demo/custom_public_modules.md)
+
 ## 📖 Documentation References
 
 - [Terraform Registry](https://registry.terraform.io/)
+- [Terraform Modules](https://developer.hashicorp.com/terraform/language/modules)
 - [AWS Provider Documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+- [terraform-aws-modules/s3-bucket/aws](https://registry.terraform.io/modules/terraform-aws-modules/s3-bucket/aws)
 
 ## 🔒 Security Best Practices
 

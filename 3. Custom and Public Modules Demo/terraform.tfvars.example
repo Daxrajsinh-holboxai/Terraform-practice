@@ -1,0 +1,18 @@
+# -----------------------------------------------------------------------------
+# Example variable values - copy to terraform.tfvars and fill in.
+#   cp terraform.tfvars.example terraform.tfvars
+# -----------------------------------------------------------------------------
+
+aws_region     = "us-east-1"
+aws_access_key = "YOUR_AWS_ACCESS_KEY"
+aws_secret_key = "YOUR_AWS_SECRET_KEY"
+
+environment = "demo"
+
+# Custom EC2 module
+custom_ec2_name_prefix = "custom-module-ec2"
+ami_id                 = "ami-00c39f71452c08778"  # Amazon Linux 2, us-east-1
+instance_type          = "t2.micro"
+
+# Public S3 bucket module (must be globally unique)
+s3_bucket_name_prefix  = "tf-practice-demo-bucket"

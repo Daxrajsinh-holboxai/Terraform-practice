@@ -24,6 +24,9 @@ terraform.rc
 *.tfstate
 *.tfstate.*
 
+# Demo-generated files (local-exec output)
+ec2_ip.txt
+
 # Ignore backup files
 *.backup
 *.bak

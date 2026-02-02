@@ -1,0 +1,15 @@
+# -----------------------------------------------------------------------------
+# Example variable values - copy this file to terraform.tfvars and fill in.
+# terraform.tfvars is auto-loaded by Terraform and is in .gitignore (not committed).
+#
+#   cp terraform.tfvars.example terraform.tfvars
+#   # Edit terraform.tfvars with your AWS credentials and region
+# -----------------------------------------------------------------------------
+
+aws_region   = "us-east-1"
+aws_access_key = "YOUR_AWS_ACCESS_KEY"
+aws_secret_key = "YOUR_AWS_SECRET_KEY"
+
+instance_type = "t2.micro"
+ami_id        = "ami-00c39f71452c08778"  # Amazon Linux 2, us-east-1
+environment   = "demo"

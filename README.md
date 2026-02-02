@@ -13,6 +13,11 @@ Terraform-practice/
 ├── 1. Deploying Infrastructure/
 │   ├── first_ec2.tf          # Terraform configuration for EC2 instance
 │   └── first_ec2.md          # Detailed documentation
+├── 2. Local-exec and Remote-exec Demo/
+│   ├── variables.tf              # Variable declarations
+│   ├── terraform.tfvars.example  # Example values (copy to terraform.tfvars)
+│   ├── local_remote_exec.tf      # Provider, resources, provisioners
+│   └── local_remote_exec.md      # Detailed documentation
 ├── .gitignore                # Git ignore rules for Terraform files
 └── README.md                 # This file
 ```
@@ -62,6 +67,46 @@ terraform destroy
 - The resource name `test-ec2` can be changed to any valid identifier
 
 For detailed documentation, see: [`1. Deploying Infrastructure/first_ec2.md`](1.%20Deploying%20Infrastructure/first_ec2.md)
+
+### 2. Local-exec and Remote-exec Demo
+
+This implementation demonstrates Terraform **local-exec** and **remote-exec** provisioners on an EC2 instance.
+
+**Configuration File:** `2. Local-exec and Remote-exec Demo/local_remote_exec.tf`
+
+**What it does:**
+- **local-exec** – Runs on your machine after the instance is created and stores the EC2 public IP in `ec2_ip.txt`.
+- **remote-exec** – Runs on the EC2 instance over SSH and performs a basic task: writes `Working` to `/tmp/remote_exec_demo.txt`.
+
+**Architecture:**
+- **variables.tf** – Variable declarations.
+- **terraform.tfvars.example** – Example values; copy to `terraform.tfvars` and set your credentials (tfvars is in .gitignore).
+- **local_remote_exec.tf** – Provider, data sources, EC2, and provisioners.
+
+**Key components:**
+- TLS key pair and AWS key pair for SSH.
+- Security group allowing SSH (port 22).
+- EC2 instance with both provisioners and outputs for IP and file paths.
+
+**Usage:**
+
+```bash
+cd "2. Local-exec and Remote-exec Demo"
+
+# Set variable values (terraform.tfvars is auto-loaded, not committed)
+cp terraform.tfvars.example terraform.tfvars
+# Edit terraform.tfvars with aws_access_key, aws_secret_key, etc.
+
+terraform init
+terraform plan
+terraform apply
+```
+
+**After apply:**
+- Check `ec2_ip.txt` in the same folder for the EC2 public IP.
+- Verify remote-exec: `ssh -i demo_key.pem ec2-user@<PUBLIC_IP> "cat /tmp/remote_exec_demo.txt"` → should show `Working`.
+
+For detailed documentation, see: [`2. Local-exec and Remote-exec Demo/local_remote_exec.md`](2.%20Local-exec%20and%20Remote-exec%20Demo/local_remote_exec.md)
 
 ## 📖 Documentation References
 
